@@ -1,0 +1,27 @@
+services:
+  app_farma:
+    build: tuFarma
+    mem_limit: 512m
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:mysql://tu_farma:3306/db_TuFarma?createDatabaseIfNotExist=true&serverTimezone=America/Lima
+      DB_USER_NAME: root
+      DB_PASSWORD: NuevaClave
+    restart: always
+    depends_on:
+      tu_farma:
+          condition: service_healthy
+  tu_farma:
+    image: mysql:8.0.43 
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: NuevaClave
+      MYSQL_PASSWORD: NuevaClave
+      MYSQL_DATABASE: db_TuFarma
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
