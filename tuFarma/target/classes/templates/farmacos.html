@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout/base :: head}"></head>	
+
+<body>
+
+  <div class="container">
+  
+    <header class="row">
+      <nav th:replace="~{layout/base :: navBar}"></nav>
+    </header>
+    
+    <main class="row">
+    <!-- Inicio de la pagina dinámica -->
+      <section class="col-lg-4 col-md-6 col-sm-12 p-5">
+        <h3 class="text-primary">Agregar Fármaco</h3>
+        
+        <form th:action="@{/farmacos/guardar}" method="post" th:object="${farmacoInsertar}" class="needs-validation" novalidate>
+          <input type="hidden" th:field="*{idFarmaco}">
+          
+          <div class="form-floating mb-3">
+            <input type="text" th:field="*{nombre}" class="form-control" placeholder="" required>
+            <label>Nombre</label>
+            <div class="invalid-tooltip">Ingrese el nombre</div>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="text" th:field="*{laboratorio}" class="form-control" placeholder="" required>
+            <label>Laboratorio</label>
+            <div class="invalid-tooltip">Ingrese el laboratorio</div>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="text" th:field="*{concentracion}" class="form-control" placeholder="">
+            <label>Concentración</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="number" th:field="*{precio}" step="0.01" class="form-control" placeholder="" required>
+            <label>Precio</label>
+            <div class="invalid-tooltip">Ingrese el precio</div>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="number" th:field="*{stock}" min="0" class="form-control" placeholder="" required>
+            <label>Stock</label>
+            <div class="invalid-tooltip">Ingrese el stock</div>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="date" th:field="*{fechaVencimiento}" class="form-control" placeholder="">
+            <label>Fecha de Vencimiento</label>
+          </div>
+
+          <div class="form-check mb-3">
+            <input type="checkbox" th:field="*{receta}" class="form-check-input">
+            <label class="form-check-label">Requiere receta</label>
+          </div>
+          
+          <button type="submit" class="btn btn-primary">
+            <span>AGREGAR</span>
+          </button>
+        
+        </form>
+      </section>
+      
+      <section class="col-lg-8 col-md-6 col-sm-12 p-5">
+      
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Laboratorio</th>
+              <th scope="col">Precio</th>
+              <th scope="col">Stock</th>
+              <th scope="col">Fecha Venc.</th>
+              <th scope="col">Receta</th>
+              <th scope="col" class="text-center">Editar</th>
+              <th scope="col" class="text-center">Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+          
+            <tr th:each="temp : ${farmacos}">
+              <th scope="row" th:text="${temp.idFarmaco}"></th>
+              <td th:text="${temp.nombre}"></td>
+              <td th:text="${temp.laboratorio}"></td>
+              <td th:text="${temp.precio}"></td>
+              <td th:text="${temp.stock}"></td>
+              <td th:text="${temp.fechaVencimiento}"></td>
+              <td th:text="${temp.receta} ? 'Sí' : 'No'"></td>
+              
+              <td class="text-center"> 
+                <a th:href="@{'/farmacos/editar/' + ${temp.idFarmaco}}">
+                  <i class="bi bi-pencil-square text-warning"></i>
+                </a>
+              </td>
+              
+              <td class="text-center"> 
+                <a th:href="@{'/farmacos/eliminar/' + ${temp.idFarmaco}}" 
+                   onclick="return confirm('¿Desea eliminar este fármaco?')">
+                  <i class="bi bi-trash text-danger"></i>
+                </a>
+              </td>				      
+            </tr>
+
+          </tbody>
+        </table>
+        
+      </section>
+    <!-- Fin de la pagina dinámica -->
+    </main>
+    
+    <footer th:replace="~{layout/base :: piePagina}"></footer>
+    
+  </div>
+
+</body>
+</html>
